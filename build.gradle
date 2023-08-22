@@ -5,11 +5,11 @@ plugins {
 // Change the values below this to your mods values
 // To change the project name, edit the settings.gradle file
 
-project.ext.modID = "fair.examplemod" // The unique id of your mod. Must be all lowercase and cannot use special characters.
-project.ext.modName = "Example Mod" // The display name of your mod.
+project.ext.modID = "fair.bossfightsummary" // The unique id of your mod. Must be all lowercase and cannot use special characters.
+project.ext.modName = "Boss Fight Summary" // The display name of your mod.
 project.ext.modVersion = "1.0" // Your current builds version. Must follow the xx.xx... format.
-project.ext.gameVersion = "0.22.0" // The target game version.
-project.ext.modDescription = "Just an example mod" // Short description of what your mod is.
+project.ext.gameVersion = "0.21.27" // The target game version.
+project.ext.modDescription = "Shows damage summary of boss fights" // Short description of what your mod is.
 project.ext.author = "Fair" // Your name
 
 /**
@@ -17,7 +17,7 @@ project.ext.author = "Fair" // Your name
  * IMPORTANT: If you set this to true, make sure that your mod does not add any content or do anything
  * that could cause clients and servers to desync. This includes registering any items, objects, tiles, packets etc.
  */
-project.ext.clientside = false
+project.ext.clientside = true
 
 /**
  * The other mod dependencies of this mod
