@@ -26,7 +26,7 @@ public class BossFightSummary {
             public void onEvent(ServerStartEvent e) {
                 currentServer = e.server;
                 trackers.clear();
-                System.out.println("Fight Summary started tracking server on world " + e.server.world.fileName);
+                System.out.println("Fight Summary started tracking server on world " + e.server.world.displayName);
             }
         });
 
