@@ -5,7 +5,7 @@ import necesse.entity.mobs.Attacker;
 import necesse.entity.mobs.Mob;
 import net.bytebuddy.asm.Advice;
 
-@ModMethodPatch(target = Mob.class, name = "setHealthHidden", arguments = {int.class, float.class, float.class, Attacker.class})
+@ModMethodPatch(target = Mob.class, name = "setHealthHidden", arguments = {int.class, float.class, float.class, Attacker.class, boolean.class})
 public class MobHealthPatch {
 
     @Advice.OnMethodEnter()
@@ -19,8 +19,8 @@ public class MobHealthPatch {
     @Advice.OnMethodExit
     static void onExit(@Advice.This Mob mob, @Advice.Argument(3) Attacker attacker, @Advice.Local("beforeHealth") int beforeHealth) {
         // Mobs can set their health before being assigned a level
-        if (mob.getLevel() != null && mob.isBoss()) {
-            if (mob.getLevel().isServerLevel()) {
+        if (mob.getLevel() != null && mob.isBoss() && mob.shouldSendSpawnPacket()) {
+            if (mob.isServer()) {
                 int damage = beforeHealth - mob.getHealth();
                 if (damage > 0) {
                     BossFightSummary.onMobDamaged(mob, damage, attacker);
