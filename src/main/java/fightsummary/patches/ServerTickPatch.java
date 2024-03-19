@@ -1,9 +1,10 @@
-package fightsummary;
+package fightsummary.patches;
 
 
+import fightsummary.BossFightSummary;
+import fightsummary.MobDamageSummary;
 import necesse.engine.modLoader.annotations.ModMethodPatch;
 import necesse.engine.network.server.Server;
-import necesse.entity.mobs.Mob;
 import net.bytebuddy.asm.Advice;
 
 import java.util.LinkedList;
@@ -19,14 +20,15 @@ public class ServerTickPatch {
         // Only need to check once a second
         if (server.tickManager().isFirstGameTickInSecond()) {
             // To avoid concurrency modification exception
-            LinkedList<Mob> removed = new LinkedList<>();
+            LinkedList<Integer> removed = new LinkedList<>();
             for (Map.Entry<Integer, MobDamageSummary> e : BossFightSummary.trackers.entrySet()) {
-                if (e.getValue().mob.removed()) {
-                    removed.add(e.getValue().mob);
+                if (e.getValue().tracker.isFightDone()) {
+                    removed.add(e.getKey());
                 }
             }
-            for (Mob mob : removed) {
-                BossFightSummary.onFightDone(mob);
+            for (int uniqueID : removed) {
+                MobDamageSummary remove = BossFightSummary.trackers.remove(uniqueID);
+                remove.displaySummary(server);
             }
         }
     }

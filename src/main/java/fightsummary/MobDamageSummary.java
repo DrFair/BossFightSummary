@@ -1,5 +1,6 @@
 package fightsummary;
 
+import fightsummary.handlers.MobTracker;
 import necesse.engine.localization.message.GameMessage;
 import necesse.engine.localization.message.LocalMessage;
 import necesse.engine.network.server.Server;
@@ -16,20 +17,19 @@ import java.util.Map;
 public class MobDamageSummary {
 
     public final long fightStartTime;
-    public final int mobUniqueID;
-    public Mob mob;
     public float minHealthPercent = 1;
+
+    public MobTracker tracker;
 
     public HashMap<Long, Long> authDamages = new HashMap<>();
 
-    public MobDamageSummary(Mob mob) {
-        this.fightStartTime = mob.getWorldEntity().getTime();
-        this.mobUniqueID = mob.getUniqueID();
-        this.mob = mob;
+    public MobDamageSummary(Server server, MobTracker tracker) {
+        this.fightStartTime = server.world.worldEntity.getTime();
+        this.tracker = tracker;
     }
 
     public void applyDamage(int damage, Attacker attacker) {
-        minHealthPercent = Math.min(minHealthPercent, (float) mob.getHealth() / mob.getMaxHealth());
+        minHealthPercent = Math.min(minHealthPercent, tracker.getHealthPercent());
         // Debug message
 //        String attackerName = attacker == null ? "N/A" : attacker.getAttackerName().translate();
 //        System.out.println("FIGHT SUMMARY: DAMAGED " + mob + ":" + damage + " - " + attackerName);
@@ -56,11 +56,11 @@ public class MobDamageSummary {
         // Keep track of the clients we need to notify
         LinkedList<ServerClient> clients = new LinkedList<>();
         LinkedList<GameMessage> messages = new LinkedList<>();
-        messages.add(new LocalMessage("fightsummary", "header", "mob", mob.getLocalization()));
+        messages.add(new LocalMessage("fightsummary", "header", "mob", tracker.getLocalization()));
         long currentTime = server.world.worldEntity.getTime();
         long elapsedTime = currentTime - fightStartTime;
         String timeString = GameUtils.getTimeStringMillis(elapsedTime);
-        if (mob.getHealth() <= 0) {
+        if (tracker.isDead()) {
             messages.add(new LocalMessage("fightsummary", "successful", "time", timeString));
         } else {
             String minHealthPercentString = ((int) (minHealthPercent * 1000) / 10f) + "%";
