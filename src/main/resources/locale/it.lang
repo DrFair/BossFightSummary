@@ -1,0 +1,5 @@
+[fightsummary]
+header=§aResoconto del Combattimento Contro <mob>:
+unsuccessful=§aIl combattimento è durato <time> e ha raggiunto il <percent> di vita
+successful=§aIl combattimento è durato <time>
+client=§7<name> ha inflitto <damage> danni totali
