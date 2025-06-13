@@ -1,0 +1,5 @@
+[fightsummary]
+header=§a<mob>战斗摘要:
+unsuccessful=§a总计坚持<time>, 剩余<percent>生命
+successful=§a总计耗时<time>
+client=§7<name>共造成<damage>伤害
