@@ -76,7 +76,7 @@ public class MobDamageSummary {
                 clients.add(client);
                 clientName = client.getName();
             } else {
-                clientName = server.usedNames.get(auth);
+                clientName = server.getSavedClientName(auth, "N/A");
             }
 
             String damageText = GameUtils.formatNumber(damage);
